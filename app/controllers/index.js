@@ -90,13 +90,25 @@ exports.requestTransaction = async(request, response) => {
       })
 }
 
-exports.getTransactions = async(request, response) => {
+exports.getTransactionsForUser = async(request, response) => {
     await supabase.from('Transaction')
   .select()
   .eq('accountNumber', request.body.accountNumber)
   .then((data) => {
     response.status(200).send(data.data)
-  }).catch((error) => {
+  })
+  .catch((error) => {
+    response.status(500).send(error)
+  })
+}
+
+exports.getTransactions = async(_, response) => {
+  await supabase.from('Transaction')
+  .select()
+  .then((data) => {
+    response.status(200).send(data.data)
+  })
+  .catch((error) => {
     response.status(500).send(error)
   })
 }
@@ -138,7 +150,7 @@ exports.getRetailers = async(_, response) => {
 }
 
 exports.getRetailer = async(request, response) => {
-    await supabase.from('Retailer').eq('retailerName', request.body.retailerName).select().then((data)=>{
+    await supabase.from('Retailer').select().eq('retailerName', request.body.retailerName).then((data)=>{
         response.status(200).send(data.data)
       }).catch((error) => {
         response.status(500).send(error)
@@ -188,7 +200,66 @@ exports.deleteRetailer = async(request, response) => {
       })
 }
 
+/*****************************************************************************************************************************************************************/
+/*
+ * These controllers will be used by both the customer and retailer
+*/
 
+exports.sumCredit = async(request, response) => {
+  await supabase.from('Transaction')
+  .select('amount.sum()')
+  .eq('status', 'approved')
+  .eq('creditDebit', 'credit')
+  .eq('issuedBy', request.body.issuedBy)
+  .then((data) => {
+    response.status(200).send(data)
+  })
+  .catch((error) => {
+    response.status(500).send(error)
+  })
+}
+
+exports.sumDebit = async(request, response) => {
+  await supabase.from('Transaction')
+  .select('amount.sum()')
+  .eq('status', 'approved')
+  .eq('creditDebit', 'debit')
+  .eq('issuedBy', request.body.issuedBy)
+  .then((data) => {
+    response.status(200).send(data)
+  })
+  .catch((error) => {
+    response.status(500).send(error)
+  })
+}
+
+exports.maxCredit = async(request, response) => {
+  await supabase.from('Transaction')
+  .select('amount.max()')
+  .eq('status', 'approved')
+  .eq('creditDebit', 'credit')
+  .eq('issuedBy', request.body.issuedBy)
+  .then((data) => {
+    response.status(200).send(data)
+  })
+  .catch((error) => {
+    response.status(500).send(error)
+  })
+}
+
+exports.maxDebit = async(request, response) => {
+  await supabase.from('Transaction')
+  .select('amount.max()')
+  .eq('status', 'approved')
+  .eq('creditDebit', 'debit')
+  .eq('issuedBy', request.body.issuedBy)
+  .then((data) => {
+    response.status(200).send(data)
+  })
+  .catch((error) => {
+    response.status(500).send(error)
+  })
+}
 
 
 
