@@ -16,19 +16,19 @@ module.exports = (app) => {
     router.get('/transactions', controller.getTransactions)
     router.get('/users/:accountNumber/balance', controller.getBalance)
     router.get('/retailers/:retailerName/locations', controller.getRetailerLocations)
-    router.delete('users/:accountNumber/delete', controller.deleteUser)
+    router.delete('/users/:accountNumber/delete', controller.deleteUser)
 
     // Retailer functions
-    router.post('retailers/:retailerName/create', controller.createRetailer)
+    router.post('/retailers/:retailerName/create', controller.createRetailer)
     router.get('/retailers', controller.getRetailers)
     router.get('/retailers/:retailerName', controller.getRetailer)
     router.get('/retailers/:retailerName/credit/sum', controller.sumCredit)
     router.get('/retailers/:retailerName/debit/sum', controller.sumDebit)
     router.get('/retailers/:retailerName/credit/max', controller.maxCredit)
     router.get('/retailers/:retailerName/debit/max', controller.maxDebit)
-    router.put('retailers/:retailerName/update', controller.updateRetailer)
+    router.put('/retailers/:retailerName/update', controller.updateRetailer)
     router.put('/:accountNumber/process-transaction', controller.processTransaction)
-    router.delete('retailers/:retailerName/delete', controller.deleteRetailer)
+    router.delete('/retailers/:retailerName/delete', controller.deleteRetailer)
 
     app.use('/api', router)
 }
