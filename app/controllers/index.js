@@ -97,9 +97,9 @@ exports.requestTransaction = async (request, response) => {
       "username": request.body.username,
       "description": request.body.description,
       "creditDebit": "credit",
-      "amount": request.body.amount,
+      // "amount": request.body.amount,
       "status": "pending",
-      "issuedBy": request.body.issuedBy,
+      // "issuedBy": request.body.issuedBy,
       "balance": request.body.balance,
     })
     .then((_) => {
@@ -267,10 +267,10 @@ exports.processTransaction = async (request, response) => {
     .update({
       // "description": request.body.description,
       // "creditDebit": request.body.creditdebit,
-      // "amount": request.body.amount,
+      "amount": request.body.amount,
       "status": "approved",
       "balance": new_balance,
-      // "issuedBy": request.body.issuedBy,
+      "issuedBy": request.body.issuedBy,
     })
     .eq("transaction_uuid", request.body.uuid)
     .then((_) => {
