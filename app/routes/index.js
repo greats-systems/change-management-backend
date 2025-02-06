@@ -8,7 +8,7 @@ module.exports = (app) => {
     router.get('/users/:accountNumber', controller.getUser)
     router.put('/users/:accountNumber/update', controller.updateUser)
     router.post('/users/:accountNumber/request-transaction', controller.requestTransaction)
-    router.get('/users/:accountNumber/transactions', controller.getTransactionsForUser)
+    router.get('/transactions/user', controller.getTransactionsForUser)
     router.get('/users/:accountNumber/credit/sum', controller.sumCredit)
     router.get('/users/:accountNumber/debit/sum', controller.sumDebit)
     router.get('/users/:accountNumber/credit/max', controller.maxCredit)
@@ -29,8 +29,11 @@ module.exports = (app) => {
     router.get('/retailers/:retailerName/credit/max', controller.maxCredit)
     router.get('/retailers/:retailerName/debit/max', controller.maxDebit)
     router.put('/retailers/:retailerName/update', controller.updateRetailer)
+    router.get('/retailers/transactions', controller.getTransactionsForRetailer)
     router.put('/transactions/process', controller.processTransaction)
     router.delete('/retailers/:retailerName/delete', controller.deleteRetailer)
+
+    // Data analysis routes
 
     app.use('/api', router)
 }

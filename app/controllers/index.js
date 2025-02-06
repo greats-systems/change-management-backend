@@ -94,7 +94,7 @@ exports.requestTransaction = async (request, response) => {
     .from("Transaction")
     .insert({
       "accountNumber": request.body.accountNumber,
-      "username": request.body.username,
+      // "username": request.body.username,
       "description": request.body.description,
       "creditDebit": "credit",
       // "amount": request.body.amount,
@@ -135,6 +135,7 @@ exports.getTransactionsForUser = async (request, response) => {
     .from("Transaction")
     .select()
     .eq("accountNumber", request.body.accountNumber)
+    .order("id", { ascending:false })
     .then((data) => {
       response.status(200).send(data.data);
     })
@@ -281,6 +282,19 @@ exports.processTransaction = async (request, response) => {
     });
 };
 
+exports.getTransactionsForRetailer = async (request, response) => {
+  await supabase
+    .from("Transaction")
+    .select()
+    // .eq("issuedBy", request.body.issuedBy)
+    .then((response) => {
+      response.status(200).send(response)
+    })
+    .catch((error) => {
+      response.status(500).send(error)
+    })
+}
+
 exports.deleteRetailer = async (request, response) => {
   await supabase
     .from("Retailer")
@@ -358,3 +372,6 @@ exports.maxDebit = async (request, response) => {
       response.status(500).send(error);
     });
 };
+
+/****************************************************************************************/
+// These routes will be used for data analysis
