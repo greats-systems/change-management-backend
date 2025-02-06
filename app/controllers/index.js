@@ -285,13 +285,14 @@ exports.processTransaction = async (request, response) => {
 exports.getTransactionsForRetailer = async (request, response) => {
   await supabase
     .from("Transaction")
-    .select()
     // .eq("issuedBy", request.body.issuedBy)
-    .then((response) => {
-      response.status(200).send(response)
+    .select()
+    .eq("issuedBy", request.query.issuedBy)
+    .then((data) => {
+      response.status(200).send(data)
     })
     .catch((error) => {
-      response.status(500).send(error)
+      response.status(500).send(error.message)
     })
 }
 

@@ -29,7 +29,7 @@ module.exports = (app) => {
     router.get('/retailers/:retailerName/credit/max', controller.maxCredit)
     router.get('/retailers/:retailerName/debit/max', controller.maxDebit)
     router.put('/retailers/:retailerName/update', controller.updateRetailer)
-    router.get('/retailers/transactions', controller.getTransactionsForRetailer)
+    router.get('/transactions/:retailerName', controller.getTransactionsForRetailer)
     router.put('/transactions/process', controller.processTransaction)
     router.delete('/retailers/:retailerName/delete', controller.deleteRetailer)
 
