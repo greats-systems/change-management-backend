@@ -4,6 +4,34 @@ const { response } = require("express");
 env.config();
 const supabase = createClient(process.env.URL, process.env.ANON_KEY);
 
+/******************************************************************VALIDATORS*************************************************************************/
+exports.createCredentials = async (request, response) => {
+  await supabase
+    .from("Validators")
+    .insert({
+      "phoneNumber" : request.body.phoneNumber,
+    })
+    .then((data) => {
+      response.status(201).send(data.data)
+    })
+    .catch((error) => {
+      response.status(500).send(error)
+    })
+}
+
+exports.getPhoneCredential = async (request, response) => {
+  await supabase
+    .from("Validators")
+    .select()
+    .eq("phoneNumber", request.body.phoneNumber)
+    .then((data) => {
+      response.status(200).send(data.data)
+    })
+    .catch((error) => {
+      response.status(500).send(error)
+    })
+}
+
 /*********************************************************************USERS***************************************************************************/
 exports.createUser = async (request, response) => {
   await supabase
@@ -16,7 +44,7 @@ exports.createUser = async (request, response) => {
       "PIN": request.body.PIN,
     })
     .then((data) => {
-      response.status(201).send(data);
+      response.status(201).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);
@@ -94,12 +122,9 @@ exports.requestTransaction = async (request, response) => {
     .from("Transaction")
     .insert({
       "accountNumber": request.body.accountNumber,
-      // "username": request.body.username,
       "description": request.body.description,
       "creditDebit": "credit",
-      // "amount": request.body.amount,
       "status": "pending",
-      // "issuedBy": request.body.issuedBy,
       "balance": request.body.balance,
     })
     .then((_) => {
@@ -169,6 +194,20 @@ exports.getPendingTransactions = async (_, response) => {
     });
 };
 
+exports.checkPendingTransactions = async (request, response) => {
+  await supabase
+    .from("Transaction")    
+    .select()
+    .eq("status", "pending")
+    .eq("accountNumber", request.body.accountNumber)
+    .then((data) => {
+      response.status(200).send(data.data);
+    })
+    .catch((error) => {
+      response.status(500).send(error);
+    });
+}
+
 exports.getRetailerLocations = async (request, response) => {
   await supabase
     .from("Retailer")
@@ -204,7 +243,7 @@ exports.createRetailer = async (request, response) => {
       "retailerAddress": request.body.retailerAddress,
     })
     .then((data) => {
-      response.status(201).send(data);
+      response.status(201).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);
@@ -266,9 +305,8 @@ exports.processTransaction = async (request, response) => {
   await supabase
     .from("Transaction")
     .update({
-      // "description": request.body.description,
-      // "creditDebit": request.body.creditdebit,
       "amount": request.body.amount,
+      "cashBackAmount": request.body.cashBackAmount,
       "status": "approved",
       "balance": new_balance,
       "issuedBy": request.body.issuedBy,
@@ -289,7 +327,7 @@ exports.getTransactionsForRetailer = async (request, response) => {
     .select()
     .eq("issuedBy", request.query.issuedBy)
     .then((data) => {
-      response.status(200).send(data)
+      response.status(200).send(data.data)
     })
     .catch((error) => {
       response.status(500).send(error.message)
@@ -322,7 +360,7 @@ exports.sumCredit = async (request, response) => {
     .eq("creditDebit", "credit")
     .eq("issuedBy", request.body.issuedBy)
     .then((data) => {
-      response.status(200).send(data);
+      response.status(200).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);
@@ -337,7 +375,7 @@ exports.sumDebit = async (request, response) => {
     .eq("creditDebit", "debit")
     .eq("issuedBy", request.body.issuedBy)
     .then((data) => {
-      response.status(200).send(data);
+      response.status(200).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);
@@ -352,7 +390,7 @@ exports.maxCredit = async (request, response) => {
     .eq("creditDebit", "credit")
     .eq("issuedBy", request.body.issuedBy)
     .then((data) => {
-      response.status(200).send(data);
+      response.status(200).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);
@@ -367,7 +405,7 @@ exports.maxDebit = async (request, response) => {
     .eq("creditDebit", "debit")
     .eq("issuedBy", request.body.issuedBy)
     .then((data) => {
-      response.status(200).send(data);
+      response.status(200).send(data.data);
     })
     .catch((error) => {
       response.status(500).send(error);

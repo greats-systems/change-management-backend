@@ -2,6 +2,10 @@ module.exports = (app) => {
     const controller = require('../controllers/index.js')
     var router = require('express').Router()
 
+    // Credential validation routes
+    router.post('/credentials/create', controller.createCredentials)
+    router.get('/credentials', controller.getPhoneCredential)
+
     // User routes
     router.post('/user/create', controller.createUser)
     router.get('/users', controller.getUsers)
@@ -15,6 +19,7 @@ module.exports = (app) => {
     router.get('/users/:accountNumber/debit/max', controller.maxDebit)
     router.get('/transactions', controller.getTransactions)
     router.get('/transactions/pending', controller.getPendingTransactions)
+    router.get('/transactions/pending/check', controller.checkPendingTransactions)
     router.get('/users/:accountNumber/balance', controller.getBalance)
     router.get('/retailers/:retailerName/locations', controller.getRetailerLocations)
     router.delete('/users/:accountNumber/delete', controller.deleteUser)
