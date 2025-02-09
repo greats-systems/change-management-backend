@@ -169,10 +169,12 @@ exports.getTransactionsForUser = async (request, response) => {
     });
 };
 
-exports.getTransactions = async (_, response) => {
+exports.getTransactions = async (request, response) => {
   await supabase
     .from("Transaction")
     .select()
+    .like('issuedBy', `%${request.query.issuedBy}%`)
+    .order("id", { ascending: false })
     .then((data) => {
       response.status(200).send(data.data);
     })
