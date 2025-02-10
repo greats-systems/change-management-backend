@@ -160,6 +160,22 @@ exports.getTransactionsForUser = async (request, response) => {
     .from("Transaction")
     .select()
     .eq("accountNumber", request.body.accountNumber)
+    .like('issuedBy', `%${request.query.issuedBy}%`)
+    .order("id", { ascending:false })
+    .then((data) => {
+      response.status(200).send(data.data);
+    })
+    .catch((error) => {
+      response.status(500).send(error);
+    });
+};
+
+exports.getRetailerTransactionsForUser = async (request, response) => {
+  await supabase
+    .from("Transaction")
+    .select()
+    .eq("accountNumber", request.body.accountNumber)
+    .ilike('issuedBy', `${request.body.issuedBy}%`)
     .order("id", { ascending:false })
     .then((data) => {
       response.status(200).send(data.data);
@@ -173,7 +189,7 @@ exports.getTransactions = async (request, response) => {
   await supabase
     .from("Transaction")
     .select()
-    .like('issuedBy', `%${request.query.issuedBy}%`)
+    .eq("accountNumber", request.body.accountNumber)
     .order("id", { ascending: false })
     .then((data) => {
       response.status(200).send(data.data);
@@ -312,6 +328,7 @@ exports.processTransaction = async (request, response) => {
       "status": "approved",
       "balance": new_balance,
       "issuedBy": request.body.issuedBy,
+      // "createdAt": Date.now()
     })
     .eq("transaction_uuid", request.body.uuid)
     .then((_) => {

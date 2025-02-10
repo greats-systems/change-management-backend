@@ -13,6 +13,7 @@ module.exports = (app) => {
     router.put('/users/:accountNumber/update', controller.updateUser)
     router.post('/users/:accountNumber/request-transaction', controller.requestTransaction)
     router.get('/transactions/user', controller.getTransactionsForUser)
+    router.get('/transactions/retailer/user', controller.getRetailerTransactionsForUser)
     router.get('/users/:accountNumber/credit/sum', controller.sumCredit)
     router.get('/users/:accountNumber/debit/sum', controller.sumDebit)
     router.get('/users/:accountNumber/credit/max', controller.maxCredit)
