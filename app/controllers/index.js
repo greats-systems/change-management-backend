@@ -344,7 +344,7 @@ exports.getTransactionsForRetailer = async (request, response) => {
     .from("Transaction")
     // .eq("issuedBy", request.body.issuedBy)
     .select()
-    .eq("issuedBy", request.query.issuedBy)
+    .like('issuedBy', `${request.query.issuedBy}%`)
     .then((data) => {
       response.status(200).send(data.data)
     })
