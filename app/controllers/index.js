@@ -4,6 +4,10 @@ const { response } = require("express");
 env.config();
 const supabase = createClient(process.env.URL, process.env.ANON_KEY);
 
+/*********************************************************************ROOT************************************************************************/
+exports.root = async(_, response) => {
+  response.status(200).send('Welcome to change-management-backend')
+}
 /******************************************************************VALIDATORS*************************************************************************/
 exports.createCredentials = async (request, response) => {
   await supabase

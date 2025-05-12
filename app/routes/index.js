@@ -2,6 +2,9 @@ module.exports = (app) => {
     const controller = require('../controllers/index.js')
     var router = require('express').Router()
 
+    // Root
+    router.get('/', controller.root)
+
     // Credential validation routes
     router.post('/credentials/create', controller.createCredentials)
     router.get('/credentials', controller.getPhoneCredential)
